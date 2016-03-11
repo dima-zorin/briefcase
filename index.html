@@ -50,7 +50,7 @@
                     <div ng-controller="ChildController" class="hiddenUpdate">
                       <form id="myFormHidden" name="myFormHidden">
                         <input type="tel" pattern="\d+(.\d{1,2})?" onclick="I = this.parentElement.parentElement.parentElement.parentNode.rowIndex" class="priceActual" name="priceActual" ng-model="priceActual" required />
-                        <input type="button" value="ок" ng-click="updatePrice()" />
+                        <input type="button" value="ок" ng-click="updatePrice()" onclick="I = this.parentElement.parentElement.parentElement.parentNode.rowIndex" />
                       </form>
                     </div>
                     <div title="кликните, для изменения" ng-click="showPriceActualInput()" class="priceUpdate" onclick="I = this.parentElement.parentNode.rowIndex" ng-bind="cellContent.priceActual"></div>

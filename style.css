@@ -1,0 +1,31 @@
+.tabsdemoStaticTabs md-tab-content {
+  padding: 25px;
+}
+
+.hiddenUpdate {
+  display: none;
+}
+
+.priceUpdate {
+  display: none;
+}
+
+th, td {
+    border-top: 1px solid #dddddd;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+#myTablePlus > tbody {
+  background-color: #aaff80;
+}
+
+#myTableMinus > tbody {
+  background-color: #ff1a1a;
+}
+
+#mainDiv, md-content, md-tabs {
+  height: 100%;
+}

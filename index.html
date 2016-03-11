@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html ng-app="MyApp">
+
+<head>
+  <script data-semver="1.5.0" data-require="angular.js@*" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.min.js"></script>
+
+  <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
+
+  <link rel="stylesheet" href="style.css" />
+
+</head>
+
+<body ng-controller="MainController">
+  <div id="mainDiv" ng-cloak>
+    <md-content>
+      <md-tabs>
+
+        <md-tab id="tab1">
+          <md-tab-label>Все</md-tab-label>
+          <md-tab-body>
+            <form name="myForm">
+              <input type="text" placeholder="Наименование акции" name="name" ng-model="name" required />
+              <input type="tel" pattern="\d+(.\d{1,2})?" placeholder="Цена покупки" name="price" ng-model="price" required />
+              <input type="number" min="1" step="1" placeholder="Количество" name="quantity" ng-model="quantity" required />
+              <input type="button" value="Добавить" ng-click="addRow()" />
+            </form>
+            <table style="width:100%" id="myTable">
+              <thead>
+                <tr>
+                  <td>Наименование</td>
+                  <td>Средняя цена</td>
+                  <td>Кол-во</td>
+                  <td>Текущая цена</td>
+                  <td>Доход/Убыток</td>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="cellContent in rows">
+                  <td ng-bind="cellContent.name"></td>
+                  <td ng-bind="cellContent.price"></td>
+                  <td ng-bind="cellContent.quantity"></td>
+                  <td>
+                    <div>
+                      <input type="button" onclick="I = this.parentElement.parentElement.parentNode.rowIndex" class="test" value="задать цену" ng-click="setPrice()" />
+                    </div>
+                    <div ng-controller="ChildController" class="hiddenUpdate">
+                      <form id="myFormHidden" name="myFormHidden">
+                        <input type="tel" pattern="\d+(.\d{1,2})?" onclick="I = this.parentElement.parentElement.parentElement.parentNode.rowIndex" class="priceActual" name="priceActual" ng-model="priceActual" required />
+                        <input type="button" value="ок" ng-click="updatePrice()" />
+                      </form>
+                    </div>
+                    <div title="кликните, для изменения" ng-click="showPriceActualInput()" class="priceUpdate" onclick="I = this.parentElement.parentNode.rowIndex" ng-bind="cellContent.priceActual"></div>
+                  </td>
+                  <td>
+                    <div>сначала задайте цену </div>
+                    <div ng-bind="cellContent.profit"></div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </md-tab-body>
+        </md-tab>
+
+        <md-tab id="tab2">
+          <md-tab-label>Доходные</md-tab-label>
+          <md-tab-body>
+            <table id="myTablePlus" style="width:100%">
+              <thead>
+                <tr>
+                  <td>Наименование</td>
+                  <td>Средняя цена</td>
+                  <td>Кол-во</td>
+                  <td>Текущая цена</td>
+                  <td>Доход</td>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="cellContentPlus in rowsPlus">
+                  <td ng-bind="cellContentPlus.name"></td>
+                  <td ng-bind="cellContentPlus.price"></td>
+                  <td ng-bind="cellContentPlus.quantity"></td>
+                  <td ng-bind="cellContentPlus.priceActual"></td>
+                  <td ng-bind="cellContentPlus.profit"></td>
+                </tr>
+              </tbody>
+            </table>
+          </md-tab-body>
+        </md-tab>
+
+        <md-tab id="tab3">
+          <md-tab-label>Убыточные</md-tab-label>
+          <md-tab-body>
+            <table id="myTableMinus" style="width:100%">
+              <thead>
+                <tr>
+                  <td>Наименование</td>
+                  <td>Средняя цена</td>
+                  <td>Кол-во</td>
+                  <td>Текущая цена</td>
+                  <td>Убыток</td>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="cellContentMinus in rowsMinus">
+                  <td ng-bind="cellContentMinus.name"></td>
+                  <td ng-bind="cellContentMinus.price"></td>
+                  <td ng-bind="cellContentMinus.quantity"></td>
+                  <td ng-bind="cellContentMinus.priceActual"></td>
+                  <td ng-bind="cellContentMinus.profit"></td>
+                </tr>
+              </tbody>
+            </table>
+          </md-tab-body>
+        </md-tab>
+
+        <md-tab id="tab4">
+          <md-tab-label>Сводка</md-tab-label>
+          <md-tab-body>
+            <table style="width:100%">
+              <tr>
+                <td>Всего бумаг</td>
+                <td ng-bind="rows.length"></td>
+              </tr>
+              <tr>
+                <td>Прибыльных</td>
+                <td ng-bind="rowsPlus.length"></td>
+              </tr>
+              <tr>
+                <td>Убыточных</td>
+                <td ng-bind="rowsMinus.length"></td>
+              </tr>
+              <tr>
+                <td>Доход/Убыток</td>
+                <td ng-bind="sum[0]"></td>
+              </tr>
+              <tr>
+                <td>Текущая цена общая</td>
+                <td ng-bind="sum[1]"></td>
+              </tr>
+            </table>
+            <br>
+            <br>
+            <div>Распределение стоимости портфеля</div>
+            <br>
+            <table id="myTableSummary" style="width:100%">
+              <thead>
+                <tr>
+                  <td>Наименование</td>
+                  <td>Процент от стоимости портфеля</td>
+                  <td>Стоимость</td>
+                  <td>Доход/Убыток</td>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="cellContentS in summary">
+                  <td ng-bind="cellContentS.nameS"></td>
+                  <td ng-bind="cellContentS.percentS"></td>
+                  <td ng-bind="cellContentS.priceActualS"></td>
+                  <td ng-bind="cellContentS.plusMinusS"></td>
+                </tr>
+              </tbody>
+            </table>
+          </md-tab-body>
+        </md-tab>
+
+      </md-tabs>
+    </md-content>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>

@@ -24,7 +24,7 @@ angular.module('MyApp', ['ngMaterial'])
               $scope.rows[i]['price'] = Math.round((($scope.rows[i]['price'] * $scope.rows[i]['quantity'] + $scope.price.replace(',', '.') * $scope.quantity) / ($scope.rows[i]['quantity'] + $scope.quantity)) * 100) / 100;
               $scope.rows[i]['quantity'] = $scope.rows[i]['quantity'] + $scope.quantity;
               if ($scope.rows[i]['priceActual'] !== null) {
-                $scope.rows[i]['profit'] = $scope.rows[i]['priceActual'] * $scope.rows[i]['quantity'] - $scope.rows[i]['price'] * $scope.rows[i]['quantity'];
+                $scope.rows[i]['profit'] = Math.round(($scope.rows[i]['priceActual'] * $scope.rows[i]['quantity'] - $scope.rows[i]['price'] * $scope.rows[i]['quantity']) * 100) / 100;
               }
 
               $scope.updatePlusMinus();
@@ -91,10 +91,10 @@ angular.module('MyApp', ['ngMaterial'])
       for (i = 0; i < $scope.rows.length; i++) {
         if ($scope.rows[i]['profit'] > 0) {
           $scope.rowsPlus.push($scope.rows[i]);
-          document.getElementById("myTable").rows[i + 1].style.background = "#aaff80";
+          angular.element(document.querySelector("#myTable").rows[i + 1]).css("background-color", "#aaff80");
         } else if ($scope.rows[i]['profit'] < 0) {
           $scope.rowsMinus.push($scope.rows[i]);
-          document.getElementById("myTable").rows[i + 1].style.background = "#ff1a1a";
+          angular.element(document.querySelector("#myTable").rows[i + 1]).css("background-color", "#ff1a1a");
         } else {
           continue;
         }
@@ -102,19 +102,19 @@ angular.module('MyApp', ['ngMaterial'])
     };
 
     $scope.setPrice = function() {
-      document.getElementById("myTable").rows[I].cells[3].children[0].remove();
-      document.getElementById("myTable").rows[I].cells[4].children[0].remove();
-      document.getElementById("myTable").rows[I].cells[3].children[0].style.display = "initial";
+      angular.element(document.querySelector("#myTable").rows[I].cells[3].children[0]).remove();
+      angular.element(document.querySelector("#myTable").rows[I].cells[4].children[0]).remove();
+      angular.element(document.querySelector("#myTable").rows[I].cells[3].children[0]).css("display", "initial");
     };
 
     $scope.showPriceActualInput = function() {
-      document.getElementById("myTable").rows[I].cells[3].children[0].style.display = "initial";
-      document.getElementById("myTable").rows[I].cells[3].children[1].style.display = "none";
+      angular.element(document.querySelector("#myTable").rows[I].cells[3].children[0]).css("display", "initial");
+      angular.element(document.querySelector("#myTable").rows[I].cells[3].children[1]).css("display", "none");
     };
-    
+
     $scope.hidePriceActualInput = function() {
-      document.getElementById("myTable").rows[I].cells[3].children[0].style.display = "none";
-      document.getElementById("myTable").rows[I].cells[3].children[1].style.display = "initial";
+      angular.element(document.querySelector("#myTable").rows[I].cells[3].children[0]).css("display", "none");
+      angular.element(document.querySelector("#myTable").rows[I].cells[3].children[1]).css("display", "initial");
     };
   }])
   .controller('ChildController', ['$scope', function($scope) {
